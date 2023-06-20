@@ -8,12 +8,9 @@ const ManifestPlugin = require("webpack-manifest-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const webpack = require("webpack");
-
 const enableBundleAnalyzer = process.env.ENABLE_ANALYZER === "true";
 
-module.exports.pitch = function (remaining) {
-  console.log("remaining is ", remaining);
-};
+const loadersPath = path.resolve(__dirname, "../loaders");
 
 module.exports = merge(common, {
   mode: "production",
@@ -21,18 +18,31 @@ module.exports = merge(common, {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          { loader: MiniCssExtractPlugin.loader },
-          { loader: "css-loader" },
-        ],
+        test: /\.(js)$/,
+        use: { loader: path.resolve(loadersPath, "testLoader.js") },
       },
+
+      // {
+      //   test: /\.(css|scss|sass)$/,
+      //   use: { loader: path.resolve(loadersPath, "cssSplideLoader.js") },
+      // },
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     { loader: MiniCssExtractPlugin.loader },
+      //     { loader: "css-loader" },
+      //   ],
+      // },
       {
-        test: /\.s(a|c)ss$/,
+        // test: /\.s(a|c)ss$/,
+        test: /\.s?(a|c)ss$/,
         use: [
-          { loader: MiniCssExtractPlugin.loader },
+          // { loader: MiniCssExtractPlugin.loader },
           { loader: "css-loader" },
           { loader: "sass-loader" },
+          // {
+          //   loader: path.resolve(loadersPath, "cssSplideLoader.js"),
+          // },
         ],
       },
     ],
@@ -44,15 +54,10 @@ module.exports = merge(common, {
     runtimeChunk: false,
   },
   plugins: [
-    // new webpack.DefinePlugin({
-    //   PROJECT_CODE: '"cmt-carousel"',
-    //   ABC: '"This is abc"',
-    // }),
-    // new webpack.DefinePlugin({
-    //   "process.env": {
-    //     PROJECT_CODE: JSON.stringify("new_project_code"),
-    //   },
-    // }),
+    new webpack.DefinePlugin({
+      PROJECT_CODE: '"cmt-carousel"',
+      ABC: '"This is abc"',
+    }),
     new CleanWebpackPlugin([path.resolve(__dirname, "../dist")], {
       root: process.cwd(),
       verbose: true,
@@ -70,5 +75,3 @@ module.exports = merge(common, {
     }),
   ],
 });
-
-// PROJEID = "fdasdfsafda"
