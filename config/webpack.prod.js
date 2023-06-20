@@ -21,29 +21,13 @@ module.exports = merge(common, {
         test: /\.(js)$/,
         use: { loader: path.resolve(loadersPath, "testLoader.js") },
       },
-
-      // {
-      //   test: /\.(css|scss|sass)$/,
-      //   use: { loader: path.resolve(loadersPath, "cssSplideLoader.js") },
-      // },
-      // {
-      //   test: /\.css$/,
-      //   use: [
-      //     { loader: MiniCssExtractPlugin.loader },
-      //     { loader: "css-loader" },
-      //   ],
-      // },
       {
-        // test: /\.s(a|c)ss$/,
+        test: /\.(scss)$/,
+        use: { loader: path.resolve(loadersPath, "cssSplideLoader.js") },
+      },
+      {
         test: /\.s?(a|c)ss$/,
-        use: [
-          // { loader: MiniCssExtractPlugin.loader },
-          { loader: "css-loader" },
-          { loader: "sass-loader" },
-          // {
-          //   loader: path.resolve(loadersPath, "cssSplideLoader.js"),
-          // },
-        ],
+        use: [{ loader: "css-loader" }, { loader: "sass-loader" }],
       },
     ],
   },
@@ -54,10 +38,6 @@ module.exports = merge(common, {
     runtimeChunk: false,
   },
   plugins: [
-    new webpack.DefinePlugin({
-      PROJECT_CODE: '"cmt-carousel"',
-      ABC: '"This is abc"',
-    }),
     new CleanWebpackPlugin([path.resolve(__dirname, "../dist")], {
       root: process.cwd(),
       verbose: true,
